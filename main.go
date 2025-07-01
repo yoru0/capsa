@@ -1,9 +1,10 @@
 package main
 
-import "github.com/yoru0/capsa-custom/internal/game"
+import (
+	"github.com/yoru0/capsa-custom/internal/game"
+)
 
 func main() {
-	game.StartGame()
+	game.Start()
 
-	// menu.Menu()
 }

@@ -30,7 +30,7 @@ func Menu() {
 		switch input {
 		case 1:
 			fmt.Println("\nStarting a new game...")
-			game.StartGame()
+			game.Start()
 			continue
 		case 2:
 			fmt.Println("Exiting...")

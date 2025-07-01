@@ -1,164 +1,110 @@
 package game
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"sort"
-	"strconv"
-	"strings"
+
+	"github.com/yoru0/capsa-custom/internal/deck"
+	"github.com/yoru0/capsa-custom/internal/player"
 )
 
-func StartGame() {
-	players := CreatePlayers()
-	winners := make(map[int]bool)
-	playersWon := 0
-	var winnerList []Winner
-	
-	
-	current := TurnFirst(players)
-	fmt.Printf("Player %d's turn.\n", current + 1)
-	WaitForEnter()
+func Start() {
+	p := player.NewPlayers(4)
+	curr := p.PlayFirst()
+	p.RemoveThree()
+	fmt.Printf("%s play first\n\n", p[curr].Name)
 
-	for playersWon < 3 {
-		if winners[current] {
-			current = (current + 1) % len(players)
-			continue
-		}
+	for len(p) > 1 {
 
-		player := &players[current]
-		fmt.Printf("%s's turn\n", player.Name)
-		fmt.Printf("Your cards [%d card(s)]:\n", len(player.Hand))
-		ShowDeck(player.Hand)
+		skip := 0
 
-		selected, picks, comboName := GetValidCombo(player.Hand)
-		fmt.Printf("Combo played: %s\n", comboName)
-		fmt.Println("[DEBUG]", selected)
+		for skip < 3 {
+			if p[curr].Skip {
+				fmt.Printf("%s skipped\n", p[curr].Name)
+				curr = (curr + 1) % len(p)
+				continue
+			}
 
-		RemoveSelectedCards(&player.Hand, picks)
+			fmt.Println("[DEBUG] curr:", curr)
+			fmt.Printf("%s [card(s): %d]:\n", p[curr].Name, len(p[curr].Hand))
+			p[curr].GetHand()
 
-		if len(player.Hand) == 0 {
-			fmt.Printf("%s wins!\n", player.Name)
-			winners[current] = true
-			playersWon++
-			winnerList = AppendWinner(winnerList, player.Name, playersWon)
-		}
+			var pick []int
+			var cards deck.Deck
+			var combo string
+			var valid bool
 
-		current = (current + 1) % len(players)
-		WaitForEnter()
-	}
-	lastPlaceName := LastPlace(winnerList)
-	winnerList = AppendWinner(winnerList, lastPlaceName, 4)
+			for {
+				pick, cards = p[curr].Pick()
+				fmt.Println(pick)
+				combo, valid = CheckCombo(cards)
+				fmt.Println("Combo:", combo)
 
-	ShowWinners(winnerList)
-}
+				if valid {
+					break
+				}
+			}
 
-func RemoveSelectedCards(hand *[]Card, picks []int) {
-	sort.Sort(sort.Reverse(sort.IntSlice(picks)))
-	for _, i := range picks {
-		if i >= 0 && i < len(*hand) {
-			*hand = append((*hand)[:i], (*hand)[i+1:]...)
-		}
-	}
-}
+			p[curr].Remove(pick)
 
-func GetValidCombo(hand []Card) ([]Card, []int, string) {
-	for {
-		picks, err := PickCards(hand)
-		if err != nil {
-			fmt.Println("Error:", err)
+			if combo == "Skip" {
+				p[curr].SkipTurn()
+				skip++
+			}
+
+			if len(p[curr].Hand) == 0 {
+				fmt.Printf("[DEBUG] %s removed\n", p[curr].Name)
+				p.RemovePlayer(curr)
+				if curr >= len(p) {
+					curr = 0
+				}
+			} else {
+				curr = (curr + 1) % len(p)
+			}
+
 			fmt.Println()
-			continue
 		}
 
-		selected := ExtractCards(hand, picks)
-		if isValid, combo := CheckCombo(selected); isValid {
-			return selected, picks, combo
+		for i := range p {
+			p[i].Skip = false
 		}
-
-		fmt.Println("Invalid combo, try again.")
-		fmt.Println()
 	}
 }
 
-func CheckCombo(selected []Card) (bool, string) {
-	length := len(selected)
+func CheckCombo(cards deck.Deck) (string, bool) {
+	length := len(cards)
 
 	switch length {
 	case 0:
-		return true, "Skip"
+		return "Skip", true
 	case 1:
-		return true, "Single"
+		return "Single", true
 	case 2:
-		if IsPair(selected) {
-			return true, "Pair"
+		if IsPair(cards) {
+			return "Pair", true
 		}
 	case 3:
-		if IsTriple(selected) {
-			return true, "Triple"
+		if IsTriple(cards) {
+			return "Triple", true
 		}
 	case 5:
 		switch {
-		case IsStraightFlush(selected):
-			return true, "Straight Flush"
-		case IsFourOfAKind(selected):
-			return true, "Four of a Kind"
-		case IsFullHouse(selected):
-			return true, "Full House"
-		case IsFlush(selected):
-			return true, "Flush"
-		case IsStraight(selected):
-			return true, "Straight"
+		case IsStraightFlush(cards):
+			return "Straight Flush", true
+		case IsFourOfAKind(cards):
+			return "Four of a Kind", true
+		case IsFullHouse(cards):
+			return "Full House", true
+		case IsFlush(cards):
+			return "Flush", true
+		case IsStraight(cards):
+			return "Straight", true
+		default:
+			fmt.Println("Invalid 5-card combo.")
 		}
-		fmt.Println("Invalid combo...")
+
 	default:
 		fmt.Println("Invalid combo length.")
 	}
 
-	return false, ""
-}
-
-func ExtractCards(hand []Card, picks []int) []Card {
-	var selected []Card
-	for _, i := range picks {
-		if i >= 0 && i < len(hand) {
-			selected = append(selected, hand[i])
-		}
-	}
-	return selected
-}
-
-func PickCards(hand []Card) ([]int, error) {
-	reader := bufio.NewReader(os.Stdin)
-
-	for {
-		fmt.Print("Pick your cards: ")
-		line, _ := reader.ReadString('\n')
-		parts := strings.Fields(line)
-
-		var picks []int
-		valid := true
-
-		for _, part := range parts {
-			num, err := strconv.Atoi(part)
-			if err != nil || num < 1 || num > len(hand) {
-				fmt.Println("Invalid input:", part)
-				valid = false
-				break
-			}
-			picks = append(picks, num-1)
-		}
-		
-		if valid {
-			return picks, nil
-		}
-		
-		fmt.Println("Please enter valid numbers between 1 and", len(hand))
-	}
-}
-
-func WaitForEnter() {
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("Press Enter to continue...")
-	_, _ = reader.ReadString('\n')
+	return "Invalid", false
 }

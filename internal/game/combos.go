@@ -1,29 +1,54 @@
 package game
 
-import "sort"
+import (
+	"sort"
 
-func IsPair(cards []Card) bool {
+	"github.com/yoru0/capsa-custom/internal/deck"
+)
+
+type ComboType int
+
+const (
+	Skip ComboType = iota
+	Single
+	Pair
+	Triple
+	Straight
+	Flush
+	FullHouse
+	FourOfAKind
+	StraightFlush
+	InvalidCombo
+)
+
+type Combo struct {
+	Type  ComboType
+	Cards deck.Deck
+	Power deck.Card
+}
+
+func IsPair(cards deck.Deck) bool {
 	if len(cards) != 2 {
 		return false
 	}
-	return cards[0].Value == cards[1].Value
+	return cards[0].Rank == cards[1].Rank
 }
 
-func IsTriple(cards []Card) bool {
+func IsTriple(cards deck.Deck) bool {
 	if len(cards) != 3 {
 		return false
 	}
-	return cards[0].Value == cards[1].Value && cards[1].Value == cards[2].Value
+	return cards[0].Rank == cards[1].Rank && cards[1].Rank == cards[2].Rank
 }
 
-func IsStraight(cards []Card) bool {
+func IsStraight(cards deck.Deck) bool {
 	if len(cards) != 5 {
 		return false
 	}
 
 	var rank []int
 	for _, c := range cards {
-		rank = append(rank, ValueRank(c.Value))
+		rank = append(rank, int(c.Rank))
 	}
 
 	sort.Ints(rank)
@@ -32,11 +57,10 @@ func IsStraight(cards []Card) bool {
 			return false
 		}
 	}
-
 	return true
 }
 
-func IsFlush(cards []Card) bool {
+func IsFlush(cards deck.Deck) bool {
 	if len(cards) != 5 {
 		return false
 	}
@@ -46,18 +70,17 @@ func IsFlush(cards []Card) bool {
 			return false
 		}
 	}
-
 	return true
 }
 
-func IsFullHouse(cards []Card) bool {
+func IsFullHouse(cards deck.Deck) bool {
 	if len(cards) != 5 {
 		return false
 	}
 
 	var rank []int
 	for _, c := range cards {
-		rank = append(rank, ValueRank(c.Value))
+		rank = append(rank, int(c.Rank))
 	}
 
 	sort.Ints(rank)
@@ -67,28 +90,26 @@ func IsFullHouse(cards []Card) bool {
 	if rank[0] == rank[1] && rank[2] == rank[4] && rank[1] != rank[2] {
 		return true
 	}
-
 	return false
 }
 
-func IsFourOfAKind(cards []Card) bool {
+func IsFourOfAKind(cards deck.Deck) bool {
 	if len(cards) != 5 {
 		return false
 	}
 
 	var rank []int
 	for _, c := range cards {
-		rank = append(rank, ValueRank(c.Value))
+		rank = append(rank, int(c.Rank))
 	}
 
 	sort.Ints(rank)
-	if rank[0] == rank[3] || rank[1] == rank[4]{
+	if rank[0] == rank[3] || rank[1] == rank[4] {
 		return true
 	}
-
 	return false
 }
 
-func IsStraightFlush(cards []Card) bool {
+func IsStraightFlush(cards deck.Deck) bool {
 	return IsStraight(cards) && IsFlush(cards)
 }
