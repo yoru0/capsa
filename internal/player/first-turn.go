@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/yoru0/capsa-custom/internal/deck"
+	"github.com/yoru0/capsa-custom/internal/design"
 )
 
 func (p *Players) WhoPlaysFirst() int {
@@ -23,7 +24,7 @@ func (p *Players) RemoveThree() {
 		fmt.Printf("%s: ", (*p)[i].Name)
 		for j, card := range (*p)[i].Hand {
 			if card.Rank == deck.Three {
-				fmt.Printf("%s ", card.Rank.String()+card.Suit.String())
+				design.PrintIndividualCardWithColor(card)
 				picks = append(picks, j)
 			}
 		}

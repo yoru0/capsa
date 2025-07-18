@@ -64,10 +64,3 @@ type Card struct {
 	Rank Rank
 	Suit Suit
 }
-
-func (c Card) Less(other Card) bool {
-	if c.Rank != other.Rank {
-		return c.Rank < other.Rank
-	}
-	return c.Suit < other.Suit
-}

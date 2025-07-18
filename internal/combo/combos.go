@@ -1,4 +1,4 @@
-package game
+package combo
 
 import (
 	"sort"
@@ -9,7 +9,8 @@ import (
 type ComboType int
 
 const (
-	Skip ComboType = iota
+	None ComboType = iota
+	Skip
 	Single
 	Pair
 	Triple
@@ -116,4 +117,33 @@ func IsFourOfAKind(cards deck.Deck) bool {
 
 func IsStraightFlush(cards deck.Deck) bool {
 	return IsStraight(cards) && IsFlush(cards)
+}
+
+func (c ComboType) String() string {
+	switch c {
+	case None:
+		return "None"
+	case Skip:
+		return "Skip"
+	case Single:
+		return "Single"
+	case Pair:
+		return "Pair"
+	case Triple:
+		return "Triple"
+	case Straight:
+		return "Straight"
+	case Flush:
+		return "Flush"
+	case FullHouse:
+		return "Full House"
+	case FourOfAKind:
+		return "Four of a Kind"
+	case StraightFlush:
+		return "Straight Flush"
+	case InvalidCombo:
+		return "Invalid Combo"
+	default:
+		return "Unknown"
+	}
 }

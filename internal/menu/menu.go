@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/yoru0/capsa-custom/internal/game"
+	// "github.com/yoru0/capsa-custom/internal/game"
 )
 
 func Menu() {
@@ -30,7 +30,7 @@ func Menu() {
 		switch input {
 		case 1:
 			fmt.Println("\nStarting a new game...")
-			game.Start()
+			// game.Start()
 			continue
 		case 2:
 			fmt.Println("Exiting...")

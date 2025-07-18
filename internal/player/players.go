@@ -23,7 +23,7 @@ func NewPlayers(numPlayers int) Players {
 	players := make(Players, numPlayers)
 
 	for i := range hands {
-		hands[i].SortDeck()
+		hands[i].SortDeckByRankAscending()
 	}
 
 	for i := 0; i < numPlayers; i++ {
@@ -39,7 +39,7 @@ func NewPlayers(numPlayers int) Players {
 
 func (p Player) ShowPlayerHand() {
 	for i, card := range p.Hand {
-		design.CardColor(card, i)
+		design.PrintPlayersHandWithColor(card, i)
 	}
 	fmt.Println()
 }

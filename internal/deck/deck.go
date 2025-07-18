@@ -21,8 +21,40 @@ func (d Deck) ShuffleDeck() {
 	rand.Shuffle(len(d), func(i, j int) { d[i], d[j] = d[j], d[i] })
 }
 
-func (d Deck) SortDeck() {
-	sort.Slice(d, func(i, j int) bool { return d[i].Less(d[j]) })
+func (d Deck) SortDeckByRankAscending() {
+	sort.Slice(d, func(i, j int) bool { 
+		if d[i].Rank != d[j].Rank {
+			return d[i].Rank < d[j].Rank
+		}
+		return d[i].Suit < d[j].Suit 
+	})
+}
+
+func (d Deck) SortDeckByRankDescending() {
+	sort.Slice(d, func(i, j int) bool {
+		if d[i].Rank != d[j].Rank {
+			return d[i].Rank > d[j].Rank
+		}
+		return d[i].Suit < d[j].Suit
+	})
+}
+
+func (d Deck) SortDeckBySuitAscending() {
+	sort.Slice(d, func(i, j int) bool { 
+		if d[i].Suit != d[j].Suit {
+			return d[i].Suit < d[j].Suit
+		}
+		return d[i].Rank < d[j].Rank 
+	})
+}
+
+func (d Deck) SortDeckBySuitDescending() {
+	sort.Slice(d, func(i, j int) bool { 
+		if d[i].Suit != d[j].Suit {
+			return d[i].Suit > d[j].Suit
+		}
+		return d[i].Rank < d[j].Rank 
+	})
 }
 
 func (d *Deck) DealDeck(players int) []Deck {
@@ -36,8 +68,4 @@ func (d *Deck) DealDeck(players int) []Deck {
 	total := players * per
 	*d = (*d)[total:]
 	return hands
-}
-
-func (d *Deck) Remove() {
-	*d = (*d)[1:]
 }
