@@ -12,7 +12,8 @@ type Game struct {
 	CurrIndex     int
 	Round         int
 	PlayerSkipped int
-	LastCombo     combo.Combo
+	ComboPlayed   combo.Combo
+	ComboToBeat   combo.Combo
 }
 
 func NewGame(numPlayers int) *Game {
@@ -24,7 +25,8 @@ func NewGame(numPlayers int) *Game {
 		CurrIndex:     first,
 		Round:         1,
 		PlayerSkipped: 0,
-		LastCombo:     combo.Combo{Type: combo.None},
+		ComboPlayed:   combo.Combo{Type: combo.None},
+		ComboToBeat:   combo.Combo{Type: combo.None},
 	}
 }
 
@@ -36,7 +38,7 @@ func (g *Game) ResetPlayerSkips() {
 }
 
 func (g *Game) ResetLastCombo() {
-	g.LastCombo.Type = combo.None
+	g.ComboToBeat.Type = combo.None
 }
 
 func (g *Game) NextPlayerTurn() {
@@ -50,7 +52,10 @@ func (g Game) CheckGameDetails(idx int) {
 	fmt.Println("CurrIndex     :", g.CurrIndex)
 	fmt.Println("Round         :", g.Round)
 	fmt.Println("PlayerSkipped :", g.PlayerSkipped)
-	fmt.Println("LastCombo     : Type :", g.LastCombo.Type)
-	fmt.Println("                Cards :", g.LastCombo.Cards)
-	fmt.Println("                Power :", g.LastCombo.Power)
+	fmt.Println("ComboPlayed   : Type  :", g.ComboPlayed.Type)
+	fmt.Println("                Cards :", g.ComboPlayed.Cards)
+	fmt.Println("                Power :", g.ComboPlayed.Power)
+	fmt.Println("ComboToBeat   : Type  :", g.ComboPlayed.Type)
+	fmt.Println("                Cards :", g.ComboPlayed.Cards)
+	fmt.Println("                Power :", g.ComboPlayed.Power)
 }

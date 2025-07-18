@@ -10,15 +10,10 @@ import (
 
 	"github.com/yoru0/capsa-custom/internal/combo"
 	"github.com/yoru0/capsa-custom/internal/deck"
+	"github.com/yoru0/capsa-custom/internal/design"
 )
 
-/*
-picks -> index yang dihapus
-cards -> cards yang dihapus
-valid -> bisa lanjut ga
-*/
-
-func (p *Player) PickCard(lastCombo string) combo.Combo {
+func (p *Player) PickCard(lastCombo combo.Combo) combo.Combo {
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
@@ -29,6 +24,7 @@ func (p *Player) PickCard(lastCombo string) combo.Combo {
 
 		picks, cards, valid := p.checkPickedCardIsValid(parts)
 
+		// Check if the cards have a valid combo.
 		if valid {
 			valid, combos = combo.CheckCombo(cards)
 			if !valid {
@@ -36,12 +32,28 @@ func (p *Player) PickCard(lastCombo string) combo.Combo {
 			}
 		}
 
-		if valid && combos.Type == combo.Skip && lastCombo == "None" {
+		// First turn can't skip.
+		if valid && combos.Type == combo.Skip && lastCombo.Type.String() == "None" {
 			valid = false
 			fmt.Println("You can't skip this")
+		} else if combos.Type == combo.Skip {
+			return combos
+		}
+
+		// Check if the combo played is stronger than last combo.
+		if valid && lastCombo.Type == combo.None {
+			valid = true
+		} else if valid {
+			valid = combo.CheckStrongerCombo(lastCombo, combos)
+			if !valid {
+				errorNeedStrongerCards(lastCombo)
+			}
 		}
 
 		if valid {
+			if combos.Type == combo.Skip {
+				return lastCombo
+			}
 			p.RemovePlayedCards(picks)
 			return combos
 		}
@@ -88,4 +100,12 @@ func (p *Player) RemovePlayedCards(picks []int) {
 			p.Hand = append(p.Hand[:i], p.Hand[i+1:]...)
 		}
 	}
+}
+
+func errorNeedStrongerCards(lastCombo combo.Combo) {
+	fmt.Printf("Need a `%s` with power higher than ", lastCombo.Type)
+	for i := range lastCombo.Cards {
+		design.PrintIndividualCardWithColor(lastCombo.Cards[i])
+	}
+	fmt.Println()
 }

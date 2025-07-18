@@ -21,12 +21,13 @@ func StartGame() {
 			fmt.Printf("%s [%d card(s)]:\n", g.Players[g.CurrIndex].Name, len(g.Players[g.CurrIndex].Hand))
 			g.Players[g.CurrIndex].ShowPlayerHand()
 
-			g.LastCombo = g.Players[g.CurrIndex].PickCard(g.LastCombo.Type.String())
+			g.ComboPlayed = g.Players[g.CurrIndex].PickCard(g.ComboToBeat)
 
-
-			if g.LastCombo.Type == combo.Skip {
+			if g.ComboPlayed.Type == combo.Skip {
 				g.Players[g.CurrIndex].Skip = true
 				g.PlayerSkipped++
+			} else {
+				g.ComboToBeat = g.ComboPlayed
 			}
 			
 
