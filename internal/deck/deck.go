@@ -17,17 +17,15 @@ func NewDeck() Deck {
 	return d
 }
 
-func (d Deck) Shuffle() {
+func (d Deck) ShuffleDeck() {
 	rand.Shuffle(len(d), func(i, j int) { d[i], d[j] = d[j], d[i] })
 }
 
-func (d Deck) Sort() {
-	sort.Slice(d, func(i, j int) bool {
-		return d[i].Less(d[j])
-	})
+func (d Deck) SortDeck() {
+	sort.Slice(d, func(i, j int) bool { return d[i].Less(d[j]) })
 }
 
-func (d *Deck) Deal(players int) []Deck {
+func (d *Deck) DealDeck(players int) []Deck {
 	per := len(*d) / players
 	hands := make([]Deck, players)
 	for i := 0; i < players; i++ {

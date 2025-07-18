@@ -61,8 +61,8 @@ func (s Suit) String() string {
 }
 
 type Card struct {
-	Suit Suit
 	Rank Rank
+	Suit Suit
 }
 
 func (c Card) Less(other Card) bool {
