@@ -7,9 +7,31 @@ import (
 	"github.com/yoru0/capsa-custom/internal/player"
 )
 
+func StartGame() {
+	g := NewGame(4)
+	fmt.Printf("%s play first\n\n", g.Players[g.CurrIndex].Name)
+	for len(g.Players) > 1 {
+		for g.PlayerSkipped < 3 {
+			// TODO
+			fmt.Println(g.Players[g.CurrIndex].Hand)
+
+			if g.Players[g.CurrIndex].Skip {
+				fmt.Printf("%s skipped\n", g.Players[g.CurrIndex].Name)
+				g.CurrIndex = (g.CurrIndex + 1) % len(g.Players)
+			}
+			c := Combo{Type: Skip}
+
+			if c.Type == Skip {
+				g.PlayerSkipped++
+
+			}
+		}
+	}
+}
+
 func Start() {
 	p := player.NewPlayers(4)
-	curr := p.PlayFirst()
+	curr := p.WhoPlaysFirst()
 	p.RemoveThree()
 	fmt.Printf("%s play first\n\n", p[curr].Name)
 
@@ -26,7 +48,7 @@ func Start() {
 
 			fmt.Println("[DEBUG] curr:", curr)
 			fmt.Printf("%s [card(s): %d]:\n", p[curr].Name, len(p[curr].Hand))
-			p[curr].GetHand()
+			p[curr].ShowPlayerHand()
 
 			var pick []int
 			var cards deck.Deck
@@ -44,7 +66,7 @@ func Start() {
 				}
 			}
 
-			p[curr].Remove(pick)
+			p[curr].RemovePlayedCards(pick)
 
 			if combo == "Skip" {
 				p[curr].SkipTurn()
@@ -53,7 +75,7 @@ func Start() {
 
 			if len(p[curr].Hand) == 0 {
 				fmt.Printf("[DEBUG] %s removed\n", p[curr].Name)
-				p.RemovePlayer(curr)
+				p.RemovePlayerAfterWin(curr)
 				if curr >= len(p) {
 					curr = 0
 				}

@@ -27,6 +27,10 @@ type Combo struct {
 	Power deck.Card
 }
 
+func NewCombo(cards deck.Deck) *Combo {
+	return &Combo{}
+}
+
 func IsPair(cards deck.Deck) bool {
 	if len(cards) != 2 {
 		return false

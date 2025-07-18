@@ -1,4 +1,4 @@
-package game
+package winner
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ type Winner struct {
 	Position   int
 }
 
-func AppendWinner(winnerList []Winner, playerName string, position int) []Winner {
+func AddWinner(winnerList []Winner, playerName string, position int) []Winner {
 	return append(winnerList, Winner{PlayerName: playerName, Position: position})
 }
 
@@ -36,7 +36,6 @@ func LastPlace(winners []Winner) string {
 		}
 		total -= i
 	}
-
 	lastPlaceName := "Player " + strconv.Itoa(total)
 	return lastPlaceName
 }

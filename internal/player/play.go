@@ -52,7 +52,7 @@ func (p Player) Pick() ([]int, deck.Deck) {
 	}
 }
 
-func (p *Player) Remove(picks []int) {
+func (p *Player) RemovePlayedCards(picks []int) {
 	sort.Sort(sort.Reverse(sort.IntSlice(picks)))
 	for _, i := range picks {
 		if i >= 0 && i < len(p.Hand) {

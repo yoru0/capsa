@@ -22,7 +22,7 @@ func CardColor(card deck.Card, i int) {
 	fmt.Printf("%d: %s%-3s%s  ", i+1, colorCode, card.Rank.String()+card.Suit.String(), reset)
 }
 
-func WaitForEnter() {
+func PressEnterToContinue() {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Println("Press Enter to continue...")
 	_, _ = reader.ReadString('\n')

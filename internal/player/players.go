@@ -18,17 +18,17 @@ type Players []Player
 
 func NewPlayers(numPlayers int) Players {
 	d := deck.NewDeck()
-	d.Shuffle()
-	hands := d.Deal(numPlayers)
+	d.ShuffleDeck()
+	hands := d.DealDeck(numPlayers)
 	players := make(Players, numPlayers)
 
 	for i := range hands {
-		hands[i].Sort()
+		hands[i].SortDeck()
 	}
 
 	for i := 0; i < numPlayers; i++ {
 		players[i] = Player{
-			Id:   i,
+			Id:   i+1,
 			Name: fmt.Sprintf("Player %d", i+1),
 			Hand: hands[i],
 			Skip: false,
@@ -37,14 +37,14 @@ func NewPlayers(numPlayers int) Players {
 	return players
 }
 
-func (p Player) GetHand() {
+func (p Player) ShowPlayerHand() {
 	for i, card := range p.Hand {
 		design.CardColor(card, i)
 	}
 	fmt.Println()
 }
 
-func (p *Players) RemovePlayer(id int) {
+func (p *Players) RemovePlayerAfterWin(id int) {
 	if id < 0 || id >= len(*p) {
 		return
 	}

@@ -6,7 +6,7 @@ import (
 	"github.com/yoru0/capsa-custom/internal/deck"
 )
 
-func (p *Players) PlayFirst() int {
+func (p *Players) WhoPlaysFirst() int {
 	for i := range *p {
 		for _, card := range (*p)[i].Hand {
 			if card.Rank == deck.Three && card.Suit == deck.Spades {
@@ -27,7 +27,7 @@ func (p *Players) RemoveThree() {
 				picks = append(picks, j)
 			}
 		}
-		(*p)[i].Remove(picks)
+		(*p)[i].RemovePlayedCards(picks)
 		fmt.Println()
 	}
 }

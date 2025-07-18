@@ -1,10 +1,16 @@
 package main
 
 import (
-	"github.com/yoru0/capsa-custom/internal/game"
+	"fmt"
+
+	"github.com/yoru0/capsa-custom/internal/deck"
 )
 
 func main() {
-	game.Start()
+
+	d := deck.NewDeck()
+	for i := range d {
+		fmt.Printf("%s ", d[i].Rank.String()+d[i].Suit.String())
+	}
 
 }
