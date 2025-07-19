@@ -4,42 +4,93 @@ import (
 	"fmt"
 
 	"github.com/yoru0/capsa-custom/internal/combo"
+	"github.com/yoru0/capsa-custom/internal/deck"
 	"github.com/yoru0/capsa-custom/internal/design"
+	"github.com/yoru0/capsa-custom/internal/player"
 )
 
 func StartGame() {
 	g := NewGame(4)
-	fmt.Printf("%s play first\n\n", g.Players[g.CurrIndex].Name)
+	var lastPlayerThatPlay string
 	for len(g.Players) > 1 {
+
+		if g.Round != 1 {
+			g.SetCurrentPlayer(lastPlayerThatPlay)
+		}
+
+		var sp player.SkipedPlayerName
 		for g.PlayerSkipped < (len(g.Players) - 1) {
-			// TODO
+
 			if g.Players[g.CurrIndex].Skip {
-				fmt.Printf("%s skipped\n", g.Players[g.CurrIndex].Name)
 				g.NextPlayerTurn()
 			}
 
-			fmt.Printf("%s [%d card(s)]:\n", g.Players[g.CurrIndex].Name, len(g.Players[g.CurrIndex].Hand))
+			detailBar(*g, sp)
+
+			fmt.Printf("%s [%d] ~\n", g.Players[g.CurrIndex].Name, len(g.Players[g.CurrIndex].Hand))
 			g.Players[g.CurrIndex].ShowPlayerHand()
 
-			g.ComboPlayed = g.Players[g.CurrIndex].PickCard(g.ComboToBeat)
+			var cards deck.Deck
+			g.ComboPlayed, cards = g.Players[g.CurrIndex].PickCard(g.ComboToBeat)
+
+			g.PlayHistory = append(g.PlayHistory, deck.History{
+				CardsPlayed: cards,
+				PlayerName:  g.Players[g.CurrIndex].Name,
+			})
 
 			if g.ComboPlayed.Type == combo.Skip {
 				g.Players[g.CurrIndex].Skip = true
 				g.PlayerSkipped++
+				g.PlayHistory.RemoveNilSkipHistory()
+				sp = append(sp, g.Players[g.CurrIndex].Name)
+				fmt.Printf("You skipped.\n\n")
 			} else {
 				g.ComboToBeat = g.ComboPlayed
+				fmt.Print("You played: ")
+				for i := range g.ComboPlayed.Cards {
+					design.PrintIndividualCardWithColor(cards[i])
+				}
+				fmt.Printf("[%s]\n\n", g.ComboPlayed.Type)
 			}
-			
 
-			g.CheckGameDetails(g.CurrIndex)
+			// g.CheckGameDetails(g.CurrIndex)
 
 			design.PressEnterToContinue()
 
 			g.NextPlayerTurn()
-
 		}
-		g.Round++
-		g.ResetPlayerSkips()
-		g.ResetLastCombo()
+
+		lastPlayerThatPlay = g.PlayHistory[len(g.PlayHistory)-1].PlayerName
+		resetToNewRound(g)
 	}
+}
+
+func resetToNewRound(g *Game) {
+	g.Round++
+	g.ResetPlayerSkips()
+	g.ResetLastCombo()
+	g.PlayHistory.ResetHistory()
+}
+
+func detailBar(g Game, sp player.SkipedPlayerName) {
+	fmt.Println("──────────────────────────────────────────────────────────────────────────────────────────────────")
+	fmt.Printf("Round: %-15d Skips: %d ", g.Round, g.PlayerSkipped)
+
+	if len(sp) > 0 {
+		fmt.Print("[")
+		for i := range sp {
+			if i == len(sp)-1 {
+				fmt.Printf("%s]", sp[i])
+			} else {
+				fmt.Printf("%s, ", sp[i])
+			}
+		}
+	}
+
+	fmt.Println()
+	if len(g.PlayHistory) > 0 {
+		g.PlayHistory.ShowHistory()
+	}
+
+	fmt.Printf("──────────────────────────────────────────────────────────────────────────────────────────────────\n\n")
 }

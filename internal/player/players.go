@@ -28,7 +28,7 @@ func NewPlayers(numPlayers int) Players {
 
 	for i := 0; i < numPlayers; i++ {
 		players[i] = Player{
-			Id:   i+1,
+			Id:   i,
 			Name: fmt.Sprintf("Player %d", i+1),
 			Hand: hands[i],
 			Skip: false,

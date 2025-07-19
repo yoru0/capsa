@@ -19,16 +19,34 @@ func (p *Players) WhoPlaysFirst() int {
 }
 
 func (p *Players) RemoveThree() {
+	fmt.Println("Threes in hand ~")
 	for i := range *p {
 		var picks []int
-		fmt.Printf("%s: ", (*p)[i].Name)
+		hasThreeSpades := false
+		for _, card := range (*p)[i].Hand {
+			if card.Rank == deck.Three && card.Suit == deck.Spades {
+				hasThreeSpades = true
+				break
+			}
+		}
 		for j, card := range (*p)[i].Hand {
 			if card.Rank == deck.Three {
+				if len(picks) == 0 {
+					if hasThreeSpades {
+						fmt.Printf("->  %s -- ", (*p)[i].Name)
+					} else {
+						fmt.Printf("    %s -- ", (*p)[i].Name)
+					}
+				}
 				design.PrintIndividualCardWithColor(card)
 				picks = append(picks, j)
 			}
 		}
-		(*p)[i].RemovePlayedCards(picks)
-		fmt.Println()
+		if len(picks) > 0 {
+			(*p)[i].RemovePlayedCards(picks)
+			fmt.Println()
+		}
 	}
+	fmt.Println()
 }
+
