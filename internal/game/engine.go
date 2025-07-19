@@ -7,21 +7,22 @@ import (
 	"github.com/yoru0/capsa-custom/internal/deck"
 	"github.com/yoru0/capsa-custom/internal/design"
 	"github.com/yoru0/capsa-custom/internal/player"
+	"github.com/yoru0/capsa-custom/internal/winner"
 )
 
 func StartGame() {
 	g := NewGame(4)
+	var w winner.Winner
 	var lastPlayerThatPlay string
-	for len(g.Players) > 1 {
 
+	for len(g.Players) > 1 {
 		if g.Round != 1 {
 			g.SetCurrentPlayer(lastPlayerThatPlay)
 		}
-
 		var sp player.SkipedPlayerName
-		for g.PlayerSkipped < (len(g.Players) - 1) {
 
-			if g.Players[g.CurrIndex].Skip {
+		for g.PlayerSkipped < (len(g.Players) - 1) {
+			for g.Players[g.CurrIndex].Skip || len(g.Players[g.CurrIndex].Hand) == 0 {
 				g.NextPlayerTurn()
 			}
 
@@ -53,6 +54,10 @@ func StartGame() {
 				fmt.Printf("[%s]\n\n", g.ComboPlayed.Type)
 			}
 
+			if len(g.Players[g.CurrIndex].Hand) == 0 {
+				w.AppendWinner(g.Players[g.CurrIndex].Name)
+			}
+
 			// g.CheckGameDetails(g.CurrIndex)
 
 			design.PressEnterToContinue()
@@ -63,6 +68,7 @@ func StartGame() {
 		lastPlayerThatPlay = g.PlayHistory[len(g.PlayHistory)-1].PlayerName
 		resetToNewRound(g)
 	}
+	w.ShowWinners()
 }
 
 func resetToNewRound(g *Game) {

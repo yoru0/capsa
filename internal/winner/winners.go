@@ -2,40 +2,38 @@ package winner
 
 import (
 	"fmt"
-	"sort"
 	"strconv"
+	"strings"
 )
 
-type Winner struct {
-	PlayerName string
-	Position   int
+type Winner []string
+
+func (w *Winner) AppendWinner(name string) {
+	*w = append(*w, name)
 }
 
-func AddWinner(winnerList []Winner, playerName string, position int) []Winner {
-	return append(winnerList, Winner{PlayerName: playerName, Position: position})
-}
-
-func ShowWinners(winners []Winner) {
+func (w Winner) ShowWinners() {
 	fmt.Println("Winners:")
-	sort.Slice(winners, func(i, j int) bool {
-		return winners[i].Position < winners[j].Position
-	})
-
-	for _, w := range winners {
-		fmt.Printf("%d. %s\n", w.Position, w.PlayerName)
+	for i, name := range w {
+		fmt.Printf("%d. %s\n", i+1, name)
 	}
+	fmt.Printf("%d. %s\n", len(w)+1, w.lastPlace())
 }
 
-func LastPlace(winners []Winner) string {
+func (w Winner) lastPlace() string {
 	total := 10
-	for i := 0; i < len(winners); i++ {
-		str := winners[i].PlayerName[len(winners[i].PlayerName)-1:]
-		i, err := strconv.Atoi(str)
+
+	for _, name := range w {
+		parts := strings.Split(name, " ")
+		if len(parts) != 2 {
+			panic("Invalid name format, expected 'Player X'")
+		}
+		num, err := strconv.Atoi(parts[1])
 		if err != nil {
 			panic(err)
 		}
-		total -= i
+		total -= num
 	}
-	lastPlaceName := "Player " + strconv.Itoa(total)
-	return lastPlaceName
+
+	return "Player " + strconv.Itoa(total)
 }
