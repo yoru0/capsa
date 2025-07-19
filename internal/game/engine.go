@@ -56,6 +56,7 @@ func StartGame() {
 
 			if len(g.Players[g.CurrIndex].Hand) == 0 {
 				w.AppendWinner(g.Players[g.CurrIndex].Name)
+				resetToNewRound(g)
 			}
 
 			// g.CheckGameDetails(g.CurrIndex)
