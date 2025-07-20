@@ -13,11 +13,13 @@ func (w *Winner) AppendWinner(name string) {
 }
 
 func (w Winner) ShowWinners() {
+	fmt.Println("──────────────────────────────────────────────────────────────────────────────────────────────────")
 	fmt.Println("Winners:")
 	for i, name := range w {
 		fmt.Printf("%d. %s\n", i+1, name)
 	}
 	fmt.Printf("%d. %s\n", len(w)+1, w.lastPlace())
+	fmt.Printf("──────────────────────────────────────────────────────────────────────────────────────────────────\n\n")
 }
 
 func (w Winner) lastPlace() string {

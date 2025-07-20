@@ -15,13 +15,13 @@ func StartGame() {
 	var w winner.Winner
 	var lastPlayerThatPlay string
 
-	for len(g.Players) > 1 {
+	for len(g.Players)-len(w) > 1 {
 		if g.Round != 1 {
 			g.SetCurrentPlayer(lastPlayerThatPlay)
 		}
 		var sp player.SkipedPlayerName
 
-		for g.PlayerSkipped < (len(g.Players) - 1) {
+		for g.PlayerSkipped < (len(g.Players) - len(w) - 1) {
 			for g.Players[g.CurrIndex].Skip || len(g.Players[g.CurrIndex].Hand) == 0 {
 				g.NextPlayerTurn()
 			}
@@ -56,6 +56,7 @@ func StartGame() {
 
 			if len(g.Players[g.CurrIndex].Hand) == 0 {
 				w.AppendWinner(g.Players[g.CurrIndex].Name)
+				fmt.Printf("You win! Position: %d\n\n", len(w))
 				resetToNewRound(g)
 			}
 
@@ -66,7 +67,9 @@ func StartGame() {
 			g.NextPlayerTurn()
 		}
 
-		lastPlayerThatPlay = g.PlayHistory[len(g.PlayHistory)-1].PlayerName
+		if len(g.PlayHistory) > 0 {
+			lastPlayerThatPlay = g.PlayHistory[len(g.PlayHistory)-1].PlayerName
+		}
 		resetToNewRound(g)
 	}
 	w.ShowWinners()

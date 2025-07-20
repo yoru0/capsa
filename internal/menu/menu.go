@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/yoru0/capsa-custom/internal/game"
 )
@@ -29,11 +30,11 @@ func MainMenu() {
 
 		switch input {
 		case 1:
-			fmt.Println("\nStarting a new game...")
+			loadingBar("Starting game", 4)
 			game.StartGame()
 			continue
 		case 2:
-			fmt.Println("Exiting...")
+			loadingBar("Exiting.", 2)
 			os.Exit(0)
 		default:
 			fmt.Println("Invalid input. Please enter 1 or 2.")
@@ -41,4 +42,14 @@ func MainMenu() {
 
 		fmt.Println('\n')
 	}
+}
+
+func loadingBar(message string, seconds int) {
+	fmt.Println()
+	fmt.Print(message)
+	for i := 0; i < seconds; i++ {
+		fmt.Print(".")
+		time.Sleep(1 * time.Second)
+	}
+	fmt.Printf("\n\n")
 }

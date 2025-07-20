@@ -2,12 +2,10 @@
 
 A terminal-based implementation of classic **Capsa** card game.
 
----
 
 ## Game Overview
 **Capsa** is a multiplayer card game where players take turns playing valid card combinations to beat the previous combo. The player who runs out of cards first wins, while the last player to play all their cards is considered the loser.
 
----
 
 ## Rules
 
@@ -37,7 +35,6 @@ A terminal-based implementation of classic **Capsa** card game.
 - The next player in order may play **any valid card or combo** — they are **not required** to follow the winning player's last combo.
 - The game continues until only one player remains.
 
----
 
 ## Combos
 
@@ -50,7 +47,6 @@ A terminal-based implementation of classic **Capsa** card game.
 - **Four of a Kind**: Four cards of the same rank + any single card
 - **Straight Flush**: Straight of same suit
 
----
 
 ## Technical
 
@@ -59,7 +55,6 @@ A terminal-based implementation of classic **Capsa** card game.
 - Local multiplayer for up to 4 players
 - In-memory game state
 
----
 
 ## Getting Started
 
