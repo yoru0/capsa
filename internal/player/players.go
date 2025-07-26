@@ -3,8 +3,8 @@ package player
 import (
 	"fmt"
 
-	"github.com/yoru0/capsa-custom/internal/deck"
-	"github.com/yoru0/capsa-custom/internal/design"
+	"github.com/yoru0/capsa/internal/deck"
+	"github.com/yoru0/capsa/internal/design"
 )
 
 type Player struct {

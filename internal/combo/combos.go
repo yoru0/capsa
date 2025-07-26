@@ -3,7 +3,7 @@ package combo
 import (
 	"sort"
 
-	"github.com/yoru0/capsa-custom/internal/deck"
+	"github.com/yoru0/capsa/internal/deck"
 )
 
 type ComboType int

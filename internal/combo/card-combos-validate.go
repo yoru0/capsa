@@ -3,7 +3,7 @@ package combo
 import (
 	"fmt"
 
-	"github.com/yoru0/capsa-custom/internal/deck"
+	"github.com/yoru0/capsa/internal/deck"
 )
 
 func CheckCombo(cards deck.Deck) (bool, Combo) {

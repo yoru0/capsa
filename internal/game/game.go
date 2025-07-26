@@ -3,9 +3,9 @@ package game
 import (
 	"fmt"
 
-	"github.com/yoru0/capsa-custom/internal/combo"
-	"github.com/yoru0/capsa-custom/internal/deck"
-	"github.com/yoru0/capsa-custom/internal/player"
+	"github.com/yoru0/capsa/internal/combo"
+	"github.com/yoru0/capsa/internal/deck"
+	"github.com/yoru0/capsa/internal/player"
 )
 
 type Game struct {

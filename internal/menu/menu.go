@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/yoru0/capsa-custom/internal/game"
+	"github.com/yoru0/capsa/internal/game"
 )
 
 func MainMenu() {

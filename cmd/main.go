@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/yoru0/capsa-custom/internal/menu"
+	"github.com/yoru0/capsa/internal/menu"
 )
 
 func main() {

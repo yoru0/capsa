@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/yoru0/capsa-custom/internal/combo"
-	"github.com/yoru0/capsa-custom/internal/deck"
-	"github.com/yoru0/capsa-custom/internal/design"
+	"github.com/yoru0/capsa/internal/combo"
+	"github.com/yoru0/capsa/internal/deck"
+	"github.com/yoru0/capsa/internal/design"
 )
 
 func (p *Player) PickCard(lastCombo combo.Combo) (combo.Combo, deck.Deck) {

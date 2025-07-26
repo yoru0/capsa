@@ -1,6 +1,6 @@
 package combo
 
-import "github.com/yoru0/capsa-custom/internal/deck"
+import "github.com/yoru0/capsa/internal/deck"
 
 
 func CheckStrongerCombo(comboToBeat Combo, currCombo Combo) bool {
