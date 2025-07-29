@@ -58,7 +58,9 @@ A terminal-based implementation of classic **Capsa** card game.
 
 ## Getting Started
 
+Download the release, or
+Clone:
 ```bash
 git clone https://github.com/yoru0/capsa.git
 cd capsa
-go run main.go
+go run cmd/main.go
