@@ -72,7 +72,7 @@ func StartGame() {
 		}
 		resetToNewRound(g)
 	}
-	w.ShowWinners()
+	w.ShowWinners(g.Players.Names())
 }
 
 func resetToNewRound(g *Game) {

@@ -12,17 +12,17 @@ func (w *Winner) AppendWinner(name string) {
 	*w = append(*w, name)
 }
 
-func (w Winner) ShowWinners() {
+func (w Winner) ShowWinners(players []string) {
 	fmt.Println("──────────────────────────────────────────────────────────────────────────────────────────────────")
 	fmt.Println("Winners:")
 	for i, name := range w {
 		fmt.Printf("%d. %s\n", i+1, name)
 	}
-	fmt.Printf("%d. %s\n", len(w)+1, w.lastPlace())
+	fmt.Printf("%d. %s\n", len(w)+1, w.lastPlace(players))
 	fmt.Printf("──────────────────────────────────────────────────────────────────────────────────────────────────\n\n")
 }
 
-func (w Winner) lastPlace() string {
+func (w Winner) lastPlace(players []string) string {
 	total := 10
 
 	for _, name := range w {

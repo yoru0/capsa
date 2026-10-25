@@ -37,6 +37,14 @@ func NewPlayers(numPlayers int) Players {
 	return players
 }
 
+func (p Players) Names() []string {
+	names := make([]string, len(p))
+	for i := range p {
+		names[i] = p[i].Name
+	}
+	return names
+}
+
 func (p Player) ShowPlayerHand() {
 	for i, card := range p.Hand {
 		design.PrintPlayersHandWithColor(card, i)
