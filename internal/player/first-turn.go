@@ -49,4 +49,3 @@ func (p *Players) RemoveThree() {
 	}
 	fmt.Println()
 }
-

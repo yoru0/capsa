@@ -22,11 +22,11 @@ func (d Deck) ShuffleDeck() {
 }
 
 func (d Deck) SortDeckByRankAscending() {
-	sort.Slice(d, func(i, j int) bool { 
+	sort.Slice(d, func(i, j int) bool {
 		if d[i].Rank != d[j].Rank {
 			return d[i].Rank < d[j].Rank
 		}
-		return d[i].Suit < d[j].Suit 
+		return d[i].Suit < d[j].Suit
 	})
 }
 
@@ -40,20 +40,20 @@ func (d Deck) SortDeckByRankDescending() {
 }
 
 func (d Deck) SortDeckBySuitAscending() {
-	sort.Slice(d, func(i, j int) bool { 
+	sort.Slice(d, func(i, j int) bool {
 		if d[i].Suit != d[j].Suit {
 			return d[i].Suit < d[j].Suit
 		}
-		return d[i].Rank < d[j].Rank 
+		return d[i].Rank < d[j].Rank
 	})
 }
 
 func (d Deck) SortDeckBySuitDescending() {
-	sort.Slice(d, func(i, j int) bool { 
+	sort.Slice(d, func(i, j int) bool {
 		if d[i].Suit != d[j].Suit {
 			return d[i].Suit > d[j].Suit
 		}
-		return d[i].Rank < d[j].Rank 
+		return d[i].Rank < d[j].Rank
 	})
 }
 
